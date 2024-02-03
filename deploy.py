@@ -19,9 +19,9 @@ class ComfyDeployAPI:
         self.base_url = 'https://www.comfydeploy.com/api'
         self.headers = {'Authorization': f'Bearer {self.api_key}'}
 
-    def run_workflow(self, deployment_id):
+    def run_workflow(self, deployment_id,inputs):
         url = f'{self.base_url}/run'
-        data = {'deployment_id': deployment_id}  # Asumiendo que se requiere un deployment_id en el cuerpo de la solicitud.
+        data = {'deployment_id': deployment_id,"inputs": inputs}  # Asumiendo que se requiere un deployment_id en el cuerpo de la solicitud.
         response = requests.post(url, headers=self.headers, json=data)
         return response.json()
 
@@ -85,7 +85,7 @@ comfy_api = ComfyDeployAPI(api_key)
 
 # Ejemplo de cómo desplegar un workflow
 workflow_id = WORKFLOW
-run_response = comfy_api.run_workflow(workflow_id)
+run_response = comfy_api.run_workflow(workflow_id,{"input_text":"a big man playing a piano"})
 print(run_response)
 
 # Ejemplo de cómo obtener la salida de la ejecución de un workflow
