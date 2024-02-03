@@ -80,29 +80,29 @@ class ComfyDeployAPI:
 
 
 # Uso de la clase
-api_key = TOKEN
-comfy_api = ComfyDeployAPI(api_key)
+#api_key = TOKEN
+#comfy_api = ComfyDeployAPI(api_key)
 
 # Ejemplo de cómo desplegar un workflow
-workflow_id = WORKFLOW
-run_response = comfy_api.run_workflow(workflow_id,{"input_text":"a big man playing a piano"})
-print(run_response)
+#workflow_id = WORKFLOW
+#run_response = comfy_api.run_workflow(workflow_id,{"input_text":"a big man playing a piano"})
+#print(run_response)
 
 # Ejemplo de cómo obtener la salida de la ejecución de un workflow
-run_id = run_response["run_id"] # Reemplaza con el run_id real obtenido después de ejecutar el workflow
-if run_id:
-    output_response = comfy_api.get_workflow_run_output(run_id)
-    print(output_response)
+#run_id = run_response["run_id"] # Reemplaza con el run_id real obtenido después de ejecutar el workflow
+#if run_id:
+    #output_response = comfy_api.get_workflow_run_output(run_id)
+    #print(output_response)
 
-    image_info = output_response.get('outputs', [{}])[0].get('data', {}).get('images', [{}])[0]
-    image_url = image_info.get('url')
+    #image_info = output_response.get('outputs', [{}])[0].get('data', {}).get('images', [{}])[0]
+    #image_url = image_info.get('url')
 
-    if image_url:
-        comfy_api.save_image_with_timestamp(image_url)
-    else:
-        print("No se encontró la URL de la imagen en el output.")
-else:
-    print("No se obtuvo run_id del workflow.")
+    #if image_url:
+        #comfy_api.save_image_with_timestamp(image_url)
+    #else:
+        #print("No se encontró la URL de la imagen en el output.")
+#else:
+    #print("No se obtuvo run_id del workflow.")
 
 
 #CARGA DE FICHEROS

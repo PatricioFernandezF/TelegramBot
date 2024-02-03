@@ -1,15 +1,16 @@
 import os
 from dotenv import load_dotenv
-import telegram
+
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
+import telegram
 from deploy import ComfyDeployAPI
+
 
 load_dotenv()
 
 # Usa la variable de entorno para obtener la API key
 TOKENTELEGRAM = os.getenv('telegram')
-# Usa la variable de entorno para obtener la API key
 TOKEN = os.getenv('comfyapi')
 WORKFLOW=os.getenv('workflow')
 
@@ -20,6 +21,31 @@ async def start(update: Update, context: telegram.ext.CallbackContext) -> None:
 # Define una función de manejo para mensajes de texto
 async def echo(update: Update, context: telegram.ext.CallbackContext) -> None:
     texto=update.message.text
+
+        # Uso de la clase
+    api_key = TOKEN
+    comfy_api = ComfyDeployAPI(api_key)
+
+    # Ejemplo de cómo desplegar un workflow
+    workflow_id = WORKFLOW
+    run_response = comfy_api.run_workflow(workflow_id,{"input_text":texto})
+    print(run_response)
+
+    # Ejemplo de cómo obtener la salida de la ejecución de un workflow
+    run_id = run_response["run_id"] # Reemplaza con el run_id real obtenido después de ejecutar el workflow
+    if run_id:
+        output_response = comfy_api.get_workflow_run_output(run_id)
+        print(output_response)
+
+        image_info = output_response.get('outputs', [{}])[0].get('data', {}).get('images', [{}])[0]
+        image_url = image_info.get('url')
+
+        if image_url:
+            await context.bot.send_photo(chat_id=update.effective_chat.id, photo=image_url)
+            return  # Finaliza la función después de enviar la imagen
+            
+    # Si no hay imagen, envía un mensaje de texto indicándolo
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="No se pudo generar una imagen.")
     
     await context.bot.send_message(chat_id=update.effective_chat.id, text=texto)
 
